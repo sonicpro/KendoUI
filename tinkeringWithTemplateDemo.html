@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<link type="text/css" rel="stylesheet" href="styles/06.css">
+    <script type="application/javascript" src="js/RequireJS/require.js"></script>
+    <script type="application/javascript" src="js/Kendo/kendo.core.patched.js"></script>
+  </head>
+  <body>
+	<div id="dictionary">
+	</div>
+      <script type="text/x-kendo-template" id="productTemplate">
+        # for (var i = 0; i != data.length; ++i) { #
+          <div class="entry">
+            <h3 class="term"> #: data[i].ProductName # </h3>
+            <div class="quote">Unit price: #: data[i].UnitPrice # </div>
+          </div>
+        # } #
+      </script>
+	<script type="application/javascript">
+      require.config({
+        baseUrl: "js/Kendo",
+        paths: {
+          jquery: "../jquery/jquery-2.2.4"
+        }
+      });
+
+      require(["kendo.data"], function () {
+          var template = kendo.template($("#productTemplate").html()),
+              url="https://demos.telerik.com/kendo-ui/service/Products",
+              dataSource = new kendo.data.DataSource({
+                  transport: {
+                      read: {
+                          url: url,
+                          dataType: "jsonp"
+                      }
+                  },
+                  change: function () {
+                      $("#dictionary").append(template(dataSource.view().toJSON()));
+                  }
+              });
+          dataSource.read();
+	  });
+	</script>
+  </body>
+</html>
