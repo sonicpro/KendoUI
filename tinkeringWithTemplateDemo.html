@@ -26,7 +26,7 @@
         }
       });
 
-      require(["kendo.data"], function () {
+      require(["kendo.data", "kendo.tooltip"], function () {
           var template = kendo.template($("#productTemplate").html()),
               url="https://demos.telerik.com/kendo-ui/service/Products",
               dataSource = new kendo.data.DataSource({
@@ -40,7 +40,18 @@
                       $("#dictionary").append(template(dataSource.view().toJSON()));
                   }
               });
+      
           dataSource.read();
+      
+          $("#dictionary").kendoTooltip({
+              filter: "img",
+              position: "right",
+              height: "35px",
+              autoHide: true,
+              content: function (e) {
+                  return e.target.attr("alt");
+              }
+          });
 	  });
 	</script>
   </body>
