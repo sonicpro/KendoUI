@@ -12,13 +12,11 @@
 	<div id="dictionary">
 	</div>
       <script type="text/x-kendo-template" id="productTemplate">
-        # for (var i = 0; i != data.length; ++i) { #
           <div class="entry">
-            <h3 class="term"> #: data[i].ProductName # </h3>
-            <div class="quote">Unit price: #: data[i].UnitPrice # </div>
-            <img src="https://demos.telerik.com/kendo-ui/content/web/foods/#= data[i].ProductID #.jpg" alt="No.#: data[i].ProductID # product image" />
+            <h3 class="term"> #: ProductName # </h3>
+            <div class="quote">Unit price: #: UnitPrice # </div>
+            <img src="https://demos.telerik.com/kendo-ui/content/web/foods/#= ProductID #.jpg" alt="No.#: ProductID # product image" />
           </div>
-        # } #
       </script>
 	<script type="application/javascript">
       require.config({
@@ -30,19 +28,24 @@
 
       require(["kendo.data", "kendo.tooltip"], function () {
           var template = kendo.template($("#productTemplate").html()),
-              url="https://demos.telerik.com/kendo-ui/service/Products",
+              url="http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products",
               dataSource = new kendo.data.DataSource({
                   transport: {
-                      read: {
-                          url: url,
-                          dataType: "jsonp"
-                      }
+                      read: url
                   },
-                  change: function () {
-                      $("#dictionary").append(template(dataSource.view().toJSON()));
+                  change: function () { // subscribe to the CHANGE event of the data source.
+                      $("#dictionary").prepend(kendo.render(template, this.view()));
+                  },
+                  type: "odata",
+                  serverFiltering: true,
+                  filter: {
+                      field: "CategoryID",
+                      operator: "eq",
+                      value: 1
                   }
               });
-      
+
+          // Read from the remote data source.
           dataSource.read();
       
           $("#dictionary").kendoTooltip({
@@ -54,6 +57,10 @@
                   return e.target.attr("alt");
               }
           });
+          var $submit = $("<input>")
+                 .attr("type", "submit")
+                 .attr("value", "Add to cart")
+                 .appendTo("#dictionary");
 	  });
 	</script>
   </body>
