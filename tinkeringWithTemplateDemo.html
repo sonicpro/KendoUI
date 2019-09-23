@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html>
   <head>
-	<meta charset="utf-8">
-	<link rel="icon" href="favicon.ico" type="image/x-icon">
-	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-	<link type="text/css" rel="stylesheet" href="styles/06.css">
+    <meta charset="utf-8">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link type="text/css" rel="stylesheet" href="styles/06.css">
     <script type="application/javascript" src="js/RequireJS/require.js"></script>
     <script type="application/javascript" src="js/Kendo/kendo.core.patched.js"></script>
   </head>
   <body>
-	<div id="dictionary">
-	</div>
+    <div id="dictionary">
+    </div>
       <script type="text/x-kendo-template" id="productTemplate">
           <div class="entry">
             <h3 class="term"> #: ProductName # </h3>
-            <div class="quote">Unit price: #: UnitPrice # </div>
+            # if (parseInt(UnitPrice) < 200) { #
+              <div class="quote" style="background-color: \\#00cd00;" >Unit price: #: UnitPrice # </div>
+            # } else { #
+              <div class="quote" style="background-color: \\#f91644; color: white" >Unit price: #: UnitPrice # </div>
+            # } #
             <img src="https://demos.telerik.com/kendo-ui/content/web/foods/#= ProductID #.jpg" alt="No.#: ProductID # product image" />
           </div>
       </script>
-	<script type="application/javascript">
+    <script type="application/javascript">
       require.config({
         baseUrl: "js/Kendo",
         paths: {
@@ -47,7 +51,7 @@
 
           // Read from the remote data source.
           dataSource.read();
-      
+
           $("#dictionary").kendoTooltip({
               filter: "img",
               position: "right",
@@ -61,7 +65,7 @@
                  .attr("type", "submit")
                  .attr("value", "Add to cart")
                  .appendTo("#dictionary");
-	  });
-	</script>
+      });
+    </script>
   </body>
 </html>
